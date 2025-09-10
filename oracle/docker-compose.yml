@@ -1,0 +1,17 @@
+services:
+  oracle-xe:
+    image: container-registry.oracle.com/database/express:21.3.0-xe
+    container_name: oracle-xe
+    ports:
+      - "1521:1521"
+      - "5500:5500"
+    environment:
+      - ORACLE_PWD=${ORACLE_PWD}
+    volumes:
+      - oracle_data:/opt/oracle/oradata
+      - ./scripts/setup:/opt/oracle/scripts/setup
+      - ./scripts/startup:/opt/oracle/scripts/startup
+    restart: unless-stopped
+
+volumes:
+  oracle_data:
