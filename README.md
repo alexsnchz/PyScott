@@ -28,16 +28,12 @@ PyScott
 ├───.env.example
 ├───.gitignore
 ├───README.md
-│
-├───.venv
-│
-├───app
-│       main.py
-│
-└───oracle
-    │   docker-compose.yml
-    │
-    └───scripts
-        └───setup
-                scott.sql
+├───.venv/
+├───app/
+│   └───main.py
+└───oracle/
+    ├───docker-compose.yml
+    └───scripts/
+        └───setup/
+            └───scott.sql
 ```
