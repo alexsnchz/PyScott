@@ -1,6 +1,6 @@
 from config.db import open_connection
 
-class Employee:
+class Department:
     @staticmethod
     def create(empno, ename, job, deptno):
         conn = open_connection()
@@ -30,7 +30,7 @@ class Employee:
 
     @staticmethod
     def delete(empno):
-        conn = open_connection()
+        conn = open_connectionn()
         with conn.cursor() as cursor:
             cursor.execute("DELETE FROM EMP WHERE EMPNO=:1", [empno])
         conn.commit()
