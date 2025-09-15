@@ -1,6 +1,10 @@
 from app.config.db import open_connection
 
 class Employee:
+    """
+    Modelo para la gestión de operaciones en BD de la tabla EMP
+    """
+
     @staticmethod
     def create(empno, ename, job, sal, deptno, mgr):
         """
@@ -36,7 +40,7 @@ class Employee:
         """
         conn = open_connection()
         with conn.cursor() as cursor:
-            cursor.execute("SELECT EMPNO, ENAME, JOB, DEPTNO FROM EMP WHERE EMPNO=:1", [empno])
+            cursor.execute("SELECT EMPNO, ENAME, JOB, DEPTNO, SAL, MGR FROM EMP WHERE EMPNO=:1", [empno])
             return cursor.fetchone()
         
     @staticmethod

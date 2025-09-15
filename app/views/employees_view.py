@@ -66,6 +66,7 @@ class EmployeesView(ttk.Frame):
         button_frame = ttk.Frame(form_frame)
         button_frame.grid(row=6, column=0, columnspan=2, pady=10)
 
+        ttk.Button(button_frame, text="Limpiar", command=self.clear_form).pack(side="left", padx=5)
         ttk.Button(button_frame, text="Crear", command=self.create_employee).pack(side="left", padx=5)
         ttk.Button(button_frame, text="Actualizar", command=self.update_employee).pack(side="left", padx=5)
         ttk.Button(button_frame, text="Eliminar", command=self.delete_employee).pack(side="left", padx=5)
@@ -96,13 +97,14 @@ class EmployeesView(ttk.Frame):
 
         try:
             empno = int(self.empno_input.get())
-            ename = self.name_input.get()
-            job = self.job_input.get()
+            ename = self.name_input.get().upper()
+            job = self.job_input.get().upper()
             deptno = int(self.depto_select.get())
             sal = int(self.sal_input.get())
-            mgr = self.mgr_select.get()
+            mgr = int(self.mgr_select.get())
             Employee.create(empno, ename, job, sal, deptno, mgr)
             messagebox.showinfo("Éxito", "Empleado creado correctamente")
+            self.clear_form()
             self.refresh_table()
         except Exception as e:
             messagebox.showerror("Error", f"No se pudo crear: {e}")
@@ -117,14 +119,13 @@ class EmployeesView(ttk.Frame):
             empno = int(self.empno_search.get())
             emp = Employee.get(empno)
             if emp:
-                self.empno_input.delete(0, tk.END)
+                self.clear_form()
                 self.empno_input.insert(0, emp[0])
-                self.name_input.delete(0, tk.END)
                 self.name_input.insert(0, emp[1])
-                self.job_input.delete(0, tk.END)
                 self.job_input.insert(0, emp[2])
-                self.depto_select.delete(0, tk.END)
                 self.depto_select.insert(0, emp[3])
+                self.sal_input.insert(0, emp[4])
+                self.mgr_select.insert(0, emp[5])
             else:
                 messagebox.showwarning("No encontrado", "El empleado no existe, verifica el número de empleado.")
         except Exception as e:
@@ -138,9 +139,10 @@ class EmployeesView(ttk.Frame):
 
         try:
             empno = int(self.empno_input.get())
-            job = self.job_input.get()
+            job = self.job_input.get().upper()
             Employee.update(empno, job)
             messagebox.showinfo("Éxito", "Empleado actualizado correctamente")
+            self.clear_form()
             self.refresh_table()
         except Exception as e:
             messagebox.showerror("Error", f"No se pudo actualizar: {e}")
@@ -155,6 +157,7 @@ class EmployeesView(ttk.Frame):
             empno = int(self.empno_input.get())
             Employee.delete(empno)
             messagebox.showinfo("Éxito", "Empleado eliminado correctamente")
+            self.clear_form()
             self.refresh_table()
         except Exception as e:
             messagebox.showerror("Error", f"No se pudo eliminar: {e}")
@@ -171,6 +174,14 @@ class EmployeesView(ttk.Frame):
         employees = Employee.get_all()
         for emp in employees:
             self.tree.insert("", "end", values=emp)
+
+    def clear_form(self):
+        self.empno_input.delete(0, tk.END)
+        self.name_input.delete(0, tk.END)
+        self.job_input.delete(0, tk.END)
+        self.depto_select.delete(0, tk.END)
+        self.sal_input.delete(0, tk.END)
+        self.mgr_select.delete(0, tk.END)
 
 if __name__ == "__main__":
     root = tk.Tk()

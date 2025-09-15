@@ -1,36 +1,80 @@
-from config.db import open_connection
+from app.config.db import open_connection
 
 class Department:
+    """
+    Modelo para la gestión de operaciones en BD de la tabla DEPT
+    """
+
     @staticmethod
-    def create(empno, ename, job, deptno):
+    def create(deptno, dname, loc):
+        """
+        Método estático que realiza una inserción en la tabla DEPT
+
+        params:
+            deptno - Número de departamento
+            dname  - Nombre del departamento
+            loc    - Ubicación
+        """
         conn = open_connection()
         with conn.cursor() as cursor:
             cursor.execute(
                 """
-                INSERT INTO EMP (EMPNO, ENAME, JOB, DEPTNO)
-                VALUES (:1, :2, :3, :4)
+                INSERT INTO DEPT (DEPTNO, DNAME, LOC)
+                VALUES (:1, :2, :3)
                 """,
-                [empno, ename, job, deptno]
+                [deptno, dname, loc]
             )
         conn.commit()
 
     @staticmethod
-    def get(empno):
+    def get(deptno):
+        """
+        Función estática que obtiene un registro de tabla DEPT
+        filtrando por deptno.
+
+        params:
+            deptno - Número de departamento
+        """
         conn = open_connection()
         with conn.cursor() as cursor:
-            cursor.execute("SELECT EMPNO, ENAME, JOB, DEPTNO FROM EMP WHERE EMPNO=:1", [empno])
+            cursor.execute("SELECT DEPTNO, DNAME, LOC FROM DEPT WHERE DEPTNO=:1", [deptno])
             return cursor.fetchone()
 
     @staticmethod
-    def update(empno, job):
+    def update(deptno, dname, loc):
+        """
+        Método estático que realiza una actualización en un row en la tabla DEPT
+        basado en el deptno
+
+        params:
+            deptno - Número de departamento
+            dname  - Nombre del departamento
+            loc    - Ubicación
+        """
         conn = open_connection()
         with conn.cursor() as cursor:
-            cursor.execute("UPDATE EMP SET JOB=:1 WHERE EMPNO=:2", [job, empno])
+            cursor.execute("UPDATE DEPT SET DNAME=:1, LOC=:2 WHERE DEPTNO=:3", [dname, loc, deptno])
         conn.commit()
 
     @staticmethod
-    def delete(empno):
-        conn = open_connectionn()
+    def delete(deptno):
+        """
+        Método estático que elimina un row de la tabla DEPT basado en el deptno
+
+        params:
+            deptno - Número de departamento
+        """
+        conn = open_connection()
         with conn.cursor() as cursor:
-            cursor.execute("DELETE FROM EMP WHERE EMPNO=:1", [empno])
+            cursor.execute("DELETE FROM DEPT WHERE DEPTNO=:1", [deptno])
         conn.commit()
+
+    @staticmethod
+    def get_all():
+        """
+        Función estática que obtiene todos los registros de la tabla DEPT
+        """
+        conn = open_connection()
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT DEPTNO, DNAME, LOC FROM DEPT ORDER BY DEPTNO")
+            return cursor.fetchall()
