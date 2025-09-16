@@ -63,6 +63,7 @@ class EmployeesView(ttk.Frame):
         """ Carga de datos para combo box departamentos """
         departments = Department.get_all("DEPTNO, DNAME")
         self.dept_map = {dname: deptno for deptno, dname in departments}
+        self.dept_map_inv = {deptno: dname for deptno, dname in departments}
         self.depto_select['values'] = list(self.dept_map.keys())
 
         ttk.Label(form_frame, text="Gerente:").grid(row=5, column=0, sticky="w", padx=5, pady=5)
@@ -73,6 +74,7 @@ class EmployeesView(ttk.Frame):
         """ Carga de datos para combo box gerentes """
         managers = Employee.get_all_names()
         self.mgr_map = {ename: empno for empno, ename in managers}
+        self.mgr_map_inv = {empno: ename for empno, ename in managers}
         self.mgr_select['values'] = list(self.mgr_map.keys())
 
         """ Botones formulario de empleado """
@@ -136,9 +138,9 @@ class EmployeesView(ttk.Frame):
                 self.empno_input.insert(0, emp[0])
                 self.name_input.insert(0, emp[1])
                 self.job_input.insert(0, emp[2])
-                self.depto_select.insert(0, emp[3])
+                self.depto_var.set(self.dept_map_inv[emp[3]])
                 self.sal_input.insert(0, emp[4])
-                self.mgr_select.insert(0, emp[5])
+                self.mgr_var.set(self.mgr_map_inv[emp[5]])
             else:
                 messagebox.showwarning("No encontrado", "El empleado no existe, verifica el número de empleado.")
         except Exception as e:
@@ -192,9 +194,9 @@ class EmployeesView(ttk.Frame):
         self.empno_input.delete(0, tk.END)
         self.name_input.delete(0, tk.END)
         self.job_input.delete(0, tk.END)
-        self.depto_select.delete(0, tk.END)
+        self.depto_var.set('')
         self.sal_input.delete(0, tk.END)
-        self.mgr_select.delete(0, tk.END)
+        self.mgr_var.set('')
 
 if __name__ == "__main__":
     root = tk.Tk()
