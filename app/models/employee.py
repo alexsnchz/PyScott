@@ -51,7 +51,24 @@ class Employee:
         """
         conn = open_connection()
         with conn.cursor() as cursor:
-            cursor.execute("select EMP.EMPNO, EMP.ENAME, EMP.JOB, EMP.SAL, EMP.HIREDATE, DEPT.DNAME, MNGR.ENAME as MNGR FROM EMP INNER JOIN DEPT ON DEPT.DEPTNO = EMP.DEPTNO LEFT JOIN EMP MNGR ON EMP.MGR = MNGR.EMPNO ORDER BY EMP.EMPNO")
+            cursor.execute(
+                """
+                SELECT EMP.EMPNO, EMP.ENAME, EMP.JOB, EMP.SAL, EMP.HIREDATE, DEPT.DNAME, MNGR.ENAME as MNGR 
+                FROM EMP INNER JOIN DEPT ON DEPT.DEPTNO = EMP.DEPTNO LEFT JOIN EMP MNGR ON EMP.MGR = MNGR.EMPNO 
+                ORDER BY EMP.EMPNO
+                """
+            )
+            return cursor.fetchall()
+        
+    @staticmethod
+    def get_all_names():
+        """
+        Método estático que obtiene los campos EMPNO y ENAME de todos los 
+        registros en la tabla EMP.
+        """
+        conn = open_connection()
+        with conn.cursor() as cursor:
+            cursor.execute("select EMPNO, ENAME FROM EMP ORDER BY EMP.EMPNO")
             return cursor.fetchall()
 
     @staticmethod

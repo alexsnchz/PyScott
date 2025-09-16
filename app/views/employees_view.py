@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from app.models.employee import Employee
+from app.models.department import Department
 
 class EmployeesView(ttk.Frame):
     """ 
@@ -39,28 +40,40 @@ class EmployeesView(ttk.Frame):
         form_frame.pack(fill="x", padx=10, pady=10)
 
         ttk.Label(form_frame, text="No. empleado:").grid(row=0, column=0, sticky="w", padx=5, pady=5)
-        self.empno_input = ttk.Entry(form_frame)
+        self.empno_input = ttk.Entry(form_frame, width=23)
         self.empno_input.grid(row=0, column=1, padx=5, pady=5)
 
         ttk.Label(form_frame, text="Nombre:").grid(row=1, column=0, sticky="w", padx=5, pady=5)
-        self.name_input = ttk.Entry(form_frame)
+        self.name_input = ttk.Entry(form_frame, width=23)
         self.name_input.grid(row=1, column=1, padx=5, pady=5)
 
         ttk.Label(form_frame, text="Puesto:").grid(row=2, column=0, sticky="w", padx=5, pady=5)
-        self.job_input = ttk.Entry(form_frame)
+        self.job_input = ttk.Entry(form_frame, width=23)
         self.job_input.grid(row=2, column=1, padx=5, pady=5)
 
         ttk.Label(form_frame, text="Salario:").grid(row=3, column=0, sticky="w", padx=5, pady=5)
-        self.sal_input = ttk.Entry(form_frame)
+        self.sal_input = ttk.Entry(form_frame, width=23)
         self.sal_input.grid(row=3, column=1, padx=5, pady=5)
 
         ttk.Label(form_frame, text="Departamento:").grid(row=4, column=0, sticky="w", padx=5, pady=5)
-        self.depto_select = ttk.Entry(form_frame)
+        self.depto_var = tk.StringVar()
+        self.depto_select = ttk.Combobox(form_frame, textvariable=self.depto_var, state="readonly")
         self.depto_select.grid(row=4, column=1, padx=5, pady=5)
 
+        """ Carga de datos para combo box departamentos """
+        departments = Department.get_all("DEPTNO, DNAME")
+        self.dept_map = {dname: deptno for deptno, dname in departments}
+        self.depto_select['values'] = list(self.dept_map.keys())
+
         ttk.Label(form_frame, text="Gerente:").grid(row=5, column=0, sticky="w", padx=5, pady=5)
-        self.mgr_select = ttk.Entry(form_frame)
+        self.mgr_var = tk.StringVar()
+        self.mgr_select = ttk.Combobox(form_frame, textvariable=self.mgr_var, state="readonly")
         self.mgr_select.grid(row=5, column=1, padx=5, pady=5)
+
+        """ Carga de datos para combo box gerentes """
+        managers = Employee.get_all_names()
+        self.mgr_map = {ename: empno for empno, ename in managers}
+        self.mgr_select['values'] = list(self.mgr_map.keys())
 
         """ Botones formulario de empleado """
         button_frame = ttk.Frame(form_frame)
@@ -99,9 +112,9 @@ class EmployeesView(ttk.Frame):
             empno = int(self.empno_input.get())
             ename = self.name_input.get().upper()
             job = self.job_input.get().upper()
-            deptno = int(self.depto_select.get())
+            deptno = self.dept_map[self.depto_var.get()]
             sal = int(self.sal_input.get())
-            mgr = int(self.mgr_select.get())
+            mgr = self.mgr_map.get(self.mgr_var.get())
             Employee.create(empno, ename, job, sal, deptno, mgr)
             messagebox.showinfo("Éxito", "Empleado creado correctamente")
             self.clear_form()

@@ -70,11 +70,14 @@ class Department:
         conn.commit()
 
     @staticmethod
-    def get_all():
+    def get_all(select = "DEPTNO, DNAME, LOC"):
         """
         Función estática que obtiene todos los registros de la tabla DEPT
+        
+        params:
+            select - Campos a obtener en el resultado (opcional)
         """
         conn = open_connection()
         with conn.cursor() as cursor:
-            cursor.execute("SELECT DEPTNO, DNAME, LOC FROM DEPT ORDER BY DEPTNO")
+            cursor.execute(f"SELECT {select} FROM DEPT ORDER BY DEPTNO")
             return cursor.fetchall()
