@@ -24,6 +24,9 @@ class MainWindow:
         ttk.Button(menu_frame, text="Empleados", command=self.show_employees).pack(fill="x", pady=5)
         ttk.Button(menu_frame, text="Departamentos", command=self.show_departments).pack(fill="x", pady=5)
 
+        """ Se carga vista de empleados como principal """
+        self.show_employees()
+
     def clear_content(self):
         """
         Destruye el contenido del frame de contenidos para cargar contenido nuevo
