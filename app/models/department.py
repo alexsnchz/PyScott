@@ -1,4 +1,4 @@
-from app.config.db import open_connection
+from app.config.db import open_connection, close_connection
 
 class Department:
     """
@@ -25,6 +25,7 @@ class Department:
                 [deptno, dname, loc]
             )
         conn.commit()
+        close_connection()
 
     @staticmethod
     def get(deptno):
@@ -55,6 +56,7 @@ class Department:
         with conn.cursor() as cursor:
             cursor.execute("UPDATE DEPT SET DNAME=:1, LOC=:2 WHERE DEPTNO=:3", [dname, loc, deptno])
         conn.commit()
+        close_connection()
 
     @staticmethod
     def delete(deptno):
@@ -68,6 +70,7 @@ class Department:
         with conn.cursor() as cursor:
             cursor.execute("DELETE FROM DEPT WHERE DEPTNO=:1", [deptno])
         conn.commit()
+        close_connection()
 
     @staticmethod
     def get_all(select = "DEPTNO, DNAME, LOC"):

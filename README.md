@@ -21,6 +21,11 @@ cd ./oracle/
 docker-compose up -d
 ```
 
+### Aplicación
+```bash
+python -m app.main
+```
+
 ## Estructura de proyecto
 ```bash
 PyScott
@@ -29,11 +34,31 @@ PyScott
 ├───.gitignore
 ├───README.md
 ├───.venv/
-├───app/
-│   └───main.py
-└───oracle/
+├───app
+│   ├───.env
+│   ├───.env.example
+│   ├───main.py
+│   ├───requirements.txt
+│   ├───__init__.py
+│   ├───config
+│   │   ├───db.py
+│   │   └───__init__.py
+│   ├───views
+│   │   ├───departments_view.py
+│   │   ├───employees_view.py
+│   │   ├───main_window.py
+│   │   └───__init__.py
+│   └───models
+│       ├───department.py
+│       ├───employee.py
+│       └───__init__.py
+└───oracle
+    ├───.env
+    ├───.env.example
     ├───docker-compose.yml
-    └───scripts/
-        └───setup/
-            └───scott.sql
+    └───scripts
+        ├───setup
+        │   └───scott.sql 
+        ├───startup
+        └───queries.sql
 ```

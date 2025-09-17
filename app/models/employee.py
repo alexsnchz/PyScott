@@ -1,4 +1,4 @@
-from app.config.db import open_connection
+from app.config.db import open_connection, close_connection
 
 class Employee:
     """
@@ -28,6 +28,7 @@ class Employee:
                 [empno, ename, job, sal, deptno, mgr]
             )
         conn.commit()
+        close_connection()
 
     @staticmethod
     def get(empno):
@@ -72,7 +73,7 @@ class Employee:
             return cursor.fetchall()
 
     @staticmethod
-    def update(empno, job):
+    def update(empno, ename, job, sal, deptno, mgr):
         """
         Método estático que realiza un update en la tabla EMP usando el
         empno como identificador del row a modificar.
@@ -83,8 +84,11 @@ class Employee:
         """
         conn = open_connection()
         with conn.cursor() as cursor:
-            cursor.execute("UPDATE EMP SET JOB=:1 WHERE EMPNO=:2", [job, empno])
+            cursor.execute("UPDATE EMP SET ENAME=:1, JOB=:2, SAL=:3, DEPTNO=:4, MGR=:5 WHERE EMPNO=:6", 
+                           [ename, job, sal, deptno, mgr, empno]
+                           )
         conn.commit()
+        close_connection()
 
     @staticmethod
     def delete(empno):
@@ -99,3 +103,4 @@ class Employee:
         with conn.cursor() as cursor:
             cursor.execute("DELETE FROM EMP WHERE EMPNO=:1", [empno])
         conn.commit()
+        close_connection()

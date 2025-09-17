@@ -154,8 +154,12 @@ class EmployeesView(ttk.Frame):
 
         try:
             empno = int(self.empno_input.get())
+            ename = self.name_input.get().upper()
             job = self.job_input.get().upper()
-            Employee.update(empno, job)
+            deptno = self.dept_map[self.depto_var.get()]
+            sal = int(self.sal_input.get())
+            mgr = self.mgr_map.get(self.mgr_var.get())
+            Employee.update(empno, ename, job, sal, deptno, mgr)
             messagebox.showinfo("Éxito", "Empleado actualizado correctamente")
             self.clear_form()
             self.refresh_table()
